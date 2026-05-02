@@ -1,0 +1,125 @@
+@model CozyNest.Models.Cart
+@{
+    ViewBag.Title = "Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/cart.css")" rel="stylesheet" />
+}
+
+<div class="container-fluid px-4 mt-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li class="breadcrumb-item active">Shopping Cart</li>
+        </ol>
+    </nav>
+
+    <h1 class="cart-title">Your Cart</h1>
+
+    @if (Model == null || !Model.CartItems.Any())
+    {
+        <div class="empty-cart">
+            <i class="bi bi-bag"></i>
+            <p>Your cart is empty.</p>
+            <a href="@Url.Action("Index", "Product")" class="btn-shop-now">Shop Now</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            <!-- Cart Items -->
+            <div class="col-md-7">
+                @foreach (var item in Model.CartItems)
+                {
+                    <div class="cart-item">
+                        <div class="d-flex gap-3">
+                            <div class="cart-item-img">
+                                <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&q=80" : item.Product.ImageUrl)" alt="@item.Product?.Name" />
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <p class="cart-item-name">@item.Product?.Name</p>
+                                    @using (Html.BeginForm("RemoveFromCart", "Cart", FormMethod.Post))
+                                    {
+                                        @Html.Hidden("cartItemId", item.CartItemId)
+                                        <button type="submit" class="btn-delete"><i class="bi bi-trash"></i></button>
+                                    }
+                                </div>
+                                <p class="cart-item-variant">Color: Default</p>
+                                <span class="stock-badge">In Stock</span>
+
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="qty-control">
+                                        <button class="btn-qty" onclick="updateQty(@item.CartItemId, -1)">−</button>
+                                        <span class="qty-value" id="qty-@item.CartItemId">@item.Quantity</span>
+                                        <button class="btn-qty" onclick="updateQty(@item.CartItemId, 1)">+</button>
+                                    </div>
+                                    <span class="cart-item-price">$@((item.Product.Price * item.Quantity).ToString("0.00"))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <a href="@Url.Action("Index", "Product")" class="btn-continue">
+                    ← Continue Shopping
+                </a>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-md-4 offset-md-1">
+                <div class="order-summary">
+                    <h5>Order Summary</h5>
+
+                    @{
+                        var subtotal = Model.CartItems.Sum(i => i.Product.Price * i.Quantity);
+                        var itemCount = Model.CartItems.Sum(i => i.Quantity);
+                    }
+
+                    <div class="summary-row">
+                        <span>Subtotal (@itemCount items)</span>
+                        <span>$@subtotal.ToString("0.00")</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping (Estimated)</span>
+                        <span style="font-weight:600">Calculated at checkout</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxes</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>$@subtotal.ToString("0.00")</span>
+                    </div>
+
+                    <a href="#" class="btn-checkout">Proceed to Checkout →</a>
+                    <p class="summary-note">Secure checkout powered by Stripe.</p>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        function updateQty(cartItemId, change) {
+            const qtyEl = document.getElementById('qty-' + cartItemId);
+            let qty = parseInt(qtyEl.textContent) + change;
+            if (qty < 1) qty = 1;
+            qtyEl.textContent = qty;
+
+            fetch('@Url.Action("UpdateQuantity", "Cart")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cartItemId: cartItemId, quantity: qty })
+            }).then(() => location.reload());
+        }
+    </script>
+}

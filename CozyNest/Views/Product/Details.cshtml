@@ -1,0 +1,166 @@
+@model CozyNest.Models.Product
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/product.css")" rel="stylesheet" />
+}
+
+<div class="container-fluid px-4 mt-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Product")">@Model.Category?.Name</a></li>
+            <li class="breadcrumb-item active">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+
+        <!-- Thumbnails -->
+        <div class="col-1 d-none d-md-block">
+            <div class="detail-thumb-list">
+                <div class="detail-thumb active">
+                    <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&q=80" : Model.ImageUrl)" />
+                </div>
+                <div class="detail-thumb">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&q=80" />
+                </div>
+                <div class="detail-thumb">
+                    <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=200&q=80" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Image -->
+        <div class="col-md-5">
+            <div class="detail-main-img">
+                <img id="mainImg" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80" : Model.ImageUrl)" alt="@Model.Name" />
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="col-md-6 ps-md-5 mt-4 mt-md-0">
+            <span class="detail-badge">New Arrival</span>
+            <h1 class="detail-title">@Model.Name</h1>
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <span class="detail-price">$@Model.Price.ToString("0.00")</span>
+                <span class="detail-rating">★★★★☆ (4.5/5)</span>
+            </div>
+            <p class="detail-desc">@Model.Description</p>
+
+            <!-- Material -->
+            @if (!string.IsNullOrEmpty(Model.Material))
+            {
+                <div class="mb-4">
+                    <p class="color-label mb-2">Material: <span style="font-weight:400;text-transform:none">@Model.Material</span></p>
+                </div>
+            }
+
+            <!-- Color Swatches (UI only) -->
+            <div class="mb-4">
+                <p class="color-label mb-2">Fabric Color: <span id="colorName" style="font-weight:400;text-transform:none">Soft Beige</span></p>
+                <div class="d-flex gap-2">
+                    <div class="color-swatch active" style="background:#e8e0d5;" onclick="selectColor(this, 'Soft Beige')"></div>
+                    <div class="color-swatch" style="background:#3a3a3a;" onclick="selectColor(this, 'Charcoal')"></div>
+                    <div class="color-swatch" style="background:#5a6b4e;" onclick="selectColor(this, 'Olive Green')"></div>
+                </div>
+            </div>
+
+            <!-- Stock -->
+            <p style="font-size:0.85rem; color: @(Model.Stock > 0 ? "#5a8a5a" : "#c0392b")">
+                @(Model.Stock > 0 ? $"✓ In Stock ({Model.Stock} available)" : "✗ Out of Stock")
+            </p>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-3 mt-4">
+                @using (Html.BeginForm("AddToCart", "Cart", FormMethod.Post))
+                {
+                    @Html.Hidden("productId", Model.ProductId)
+                    @Html.Hidden("quantity", 1)
+                    <button type="submit" class="btn-add-cart">Add to Cart</button>
+                }
+                <button class="btn-save"><i class="bi bi-heart"></i> Save</button>
+            </div>
+
+            <!-- Accordion -->
+            <div class="accordion mt-4" id="detailAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dims">
+                            Dimensions & Details
+                        </button>
+                    </h2>
+                    <div id="dims" class="accordion-collapse collapse">
+                        <div class="accordion-body" style="font-size:0.88rem;color:#555">
+                            Material: @Model.Material <br />
+                            Stock: @Model.Stock units
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shipping">
+                            Shipping & Returns
+                        </button>
+                    </h2>
+                    <div id="shipping" class="accordion-collapse collapse">
+                        <div class="accordion-body" style="font-size:0.88rem;color:#555">
+                            Free shipping on orders over $500. Returns accepted within 30 days.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    @if (ViewBag.RelatedProducts != null)
+    {
+        var relatedList = ViewBag.RelatedProducts as IEnumerable<CozyNest.Models.Product>;
+        <div class="mt-5 pt-4">
+            <p class="related-title">Complete the Sanctuary</p>
+            <div class="row g-4">
+                @foreach (var related in relatedList)
+                {
+                    <div class="col-6 col-md-3">
+                        <a href="@Url.Action("Details", "Product", new { id = related.ProductId })" class="product-grid-card">
+                            <div class="product-grid-img">
+                                <img src="@(string.IsNullOrEmpty(related.ImageUrl) ? "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80" : related.ImageUrl)" alt="@related.Name" />
+                            </div>
+                            <div class="product-grid-body">
+                                <p class="product-grid-name">@related.Name</p>
+                                <p class="product-grid-price">$@related.Price.ToString("0.00")</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+</div>
+
+@section scripts {
+    <script>
+        // Color swatch picker
+        function selectColor(el, name) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('colorName').textContent = name;
+        }
+
+        // Thumbnail switcher
+        document.querySelectorAll('.detail-thumb').forEach(thumb => {
+            thumb.addEventListener('click', function () {
+                document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('mainImg').src = this.querySelector('img').src;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿## Build folders
+bin/
+obj/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.log
+
+## Rider (nếu có)
+.idea/
+
+## Packages (optional)
+packages/
+
+## Node (nếu dùng frontend sau này)
+node_modules/
+
+## OS files
+.DS_Store
+Thumbs.db

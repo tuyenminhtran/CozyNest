@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid px-4">
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")"><h4>CozyNest</h4></a>
+
+        <!-- Toggler mobile -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav links -->
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")"
+                       href="@Url.Action("Index", "Home")">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Product" ? "active" : "")"
+                       href="@Url.Action("Index", "Product")">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Collections</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+            </ul>
+
+            <!-- Icons -->
+            <div class="navbar-icons d-flex align-items-center">
+                <a href="#"><i class="bi bi-search"></i></a>
+                <a href="@Url.Action("Index", "Cart")"><i class="bi bi-bag"></i></a>
+                @if (Session["UserId"] != null)
+                {
+                    <a href="@Url.Action("Index", "Account")"><i class="bi bi-person"></i></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account")" class="btn-login ms-2">Login</a>
+                }
+            </div>
+        </div>
+
+    </div>
+</nav>

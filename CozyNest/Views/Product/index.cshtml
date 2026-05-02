@@ -1,0 +1,120 @@
+@model IEnumerable<CozyNest.Models.Product>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/product.css")" rel="stylesheet" />
+}
+
+<div class="container-fluid px-4 mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div class="page-header">
+            <h1>Our Collection</h1>
+            <p>Curated pieces for a mindful home.</p>
+        </div>
+        <div class="search-bar">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchInput" placeholder="Search collection..." />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-2 filter-sidebar">
+            <p class="filter-title">Categories</p>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="catAll" checked />
+                <label class="form-check-label" for="catAll">All</label>
+            </div>
+            @if (ViewBag.Categories != null)
+            {
+                foreach (var cat in ViewBag.Categories)
+                {
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="cat@(cat.CategoryId)" />
+                        <label class="form-check-label" for="cat@(cat.CategoryId)">@cat.Name</label>
+                    </div>
+                }
+            }
+
+            <p class="filter-title mt-4">Price Range</p>
+            <input type="range" class="form-range" min="0" max="1000" />
+            <div class="price-range"><span>$0</span><span>$1000+</span></div>
+
+            <p class="filter-title mt-4">Availability</p>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" checked />
+                <label class="form-check-label">In Stock</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" />
+                <label class="form-check-label">Pre-order</label>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="col-md-10">
+            <div class="row g-4" id="productGrid">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var product in Model)
+                    {
+                        <div class="col-6 col-md-4">
+                            <a href="@Url.Action("Details", "Product", new { id = product.ProductId })" class="product-grid-card">
+                                <div class="product-grid-img">
+                                    <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80" : product.ImageUrl)" alt="@product.Name" />
+                                    <span class="product-grid-badge">@(product.Stock > 10 ? "In Stock" : "New Arrival")</span>
+                                </div>
+                                <div class="product-grid-body">
+                                    <p class="product-grid-name">@product.Name</p>
+                                    <p class="product-grid-desc">@product.Description</p>
+                                    <div class="product-grid-footer">
+                                        <span class="product-grid-price">$@product.Price.ToString("0.00")</span>
+                                        <button class="btn-add-quick" onclick="event.preventDefault()">+</button>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-center py-5">
+                        <p style="color:#aaa">No products found.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-5">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">‹</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">8</a></li>
+                    <li class="page-item"><a class="page-link" href="#">›</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('#productGrid .col-6').forEach(card => {
+                const name = card.querySelector('.product-grid-name').textContent.toLowerCase();
+                card.style.display = name.includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+}

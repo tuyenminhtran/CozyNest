@@ -1,0 +1,166 @@
+﻿/* ===== AUTH PAGES (Login & Register) ===== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+}
+
+/* Left image panel */
+.auth-left {
+    background-image: url('/images/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    height: 100vh;
+}
+
+.auth-left-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+}
+
+    .auth-left-overlay h2 {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .auth-left-overlay p {
+        color: rgba(255,255,255,0.8);
+        font-size: 0.95rem;
+    }
+
+/* Right form panel */
+.auth-right {
+    height: 100vh;
+    background: #faf9f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+}
+
+.auth-form-box {
+    width: 100%;
+    max-width: 420px;
+}
+
+    .auth-form-box h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .auth-form-box .subtitle {
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 36px;
+        text-align: center;
+    }
+
+/* Form elements */
+.form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.input-group-text {
+    background: #f0ede8;
+    border: none;
+    color: #999;
+}
+
+.form-control {
+    background: #f0ede8;
+    border: none;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+    .form-control:focus {
+        background: #e8e4de;
+        box-shadow: none;
+        border: none;
+    }
+
+    .form-control::placeholder {
+        color: #bbb;
+    }
+
+/* Buttons */
+.btn-auth {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+    .btn-auth:hover {
+        background: #333;
+        color: #fff;
+    }
+
+/* Links */
+.forgot-link {
+    font-size: 0.82rem;
+    color: #888;
+    text-decoration: underline;
+}
+
+.auth-switch-text {
+    font-size: 0.88rem;
+    color: #888;
+    text-align: center;
+    margin-top: 24px;
+}
+
+    .auth-switch-text a {
+        color: #1a1a1a;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .auth-switch-text a:hover {
+            text-decoration: underline;
+        }
+
+/* Register extras */
+.form-check-input:checked {
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+.form-check-label {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+    .form-check-label a {
+        color: #1a1a1a;
+        font-weight: 600;
+    }

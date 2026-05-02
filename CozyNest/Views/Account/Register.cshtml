@@ -1,0 +1,106 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - CozyNest Decor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/auth.css")" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+
+            <!-- Left: Image -->
+            <div class="col-md-6 d-none d-md-block p-0 auth-left" 
+                 style="background-image: url('@Url.Content("~/Content/images/register.png")')" 
+            </div>
+                <div class="auth-left-overlay">
+                    <h2>Defining Space.</h2>
+                    <p>Curated comfort for your sanctuary.</p>
+                </div>
+            </div>
+
+            <!-- Right: Form -->
+            <div class="col-md-6 p-0 auth-right">
+                <div class="auth-form-box">
+                    <h1>CozyNest</h1>
+                    <p class="subtitle">Create your account to curate your sanctuary.</p>
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            @Html.TextBox("FullName", null, new { @class = "form-control", placeholder = "Enter your name" })
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@example.com", type = "email" })
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                @Html.Password("Password", null, new { @class = "form-control", placeholder = "Enter your password", id = "passwordInput" })
+                                <button class="input-group-text" type="button" onclick="togglePassword()">
+                                    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            @Html.Password("ConfirmPassword", null, new { @class = "form-control", placeholder = "Enter your password" })
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="terms" required />
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                            </label>
+                        </div>
+
+                        <!-- Error -->
+                        if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger py-2" style="font-size:0.85rem">@ViewBag.Error</div>
+                        }
+
+                        <button type="submit" class="btn-auth">Create Account</button>
+                    }
+
+                    <p class="auth-switch-text">Already have an account? <a href="@Url.Action("Login", "Account")">Log In</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const icon = document.getElementById('toggleIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye-slash';
+            }
+        }
+    </script>
+</body>
+</html>

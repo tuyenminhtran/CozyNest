@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/home.css")" rel="stylesheet" />
+}
+
+<div class="container-fluid px-4">
+
+    <!-- Hero -->
+    <div class="hero-section">
+        <img src="~/Content/images/hero-section-2.jpg" alt="Hero" />
+        <div class="hero-overlay">
+            <h1>Make your space feel like home</h1>
+            <p>Curated comfort for the intentional dweller. Discover pieces that bring warmth and peace to your environment.</p>
+            <a href="@Url.Action("Index", "Product")" class="btn-hero">Shop the Collection</a>
+        </div>
+    </div>
+
+    <!-- Curated Spaces -->
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+        <span class="section-title">Curated Spaces</span>
+        <a href="@Url.Action("Index", "Product")" class="section-link">View all categories →</a>
+    </div>
+    <div class="category-grid">
+        <div class="category-card large">
+            <img src="~/Content/images/furniture.jpg" alt="Furniture" />
+            <span class="category-label">Furniture</span>
+        </div>
+        <div class="category-card">
+            <img src="~/Content/images/lightning.jpg" alt="Lighting" />
+            <span class="category-label">Lighting</span>
+        </div>
+        <div class="category-card">
+            <img src="~/Content/images/plants.jpg" alt="Plants" />
+            <span class="category-label">Plants</span>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="d-flex justify-content-between align-items-center mt-5 mb-4">
+        <span class="section-title">Featured Pieces</span>
+    </div>
+    <div class="row g-3">
+        @if (ViewBag.FeaturedProducts != null)
+        {
+            foreach (var product in ViewBag.FeaturedProducts)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-card-img">
+                            <img src="@product.ImageUrl" alt="@product.Name" />
+                            <span class="product-badge">@(product.Stock > 10 ? "In Stock" : "New Arrival")</span>
+                        </div>
+                        <p class="product-name">@product.Name</p>
+                        <p class="product-price">$@product.Price.ToString("0.00")</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- Placeholder khi chưa có data -->
+            for (int i = 0; i < 4; i++)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-card-img" style="background:#e8e4de;aspect-ratio:1;border-radius:12px;"></div>
+                        <p class="product-name">Sample Product</p>
+                        <p class="product-price">$0.00</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="container-fluid px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="footer-brand">© 2026 CozyNest. Curated for your comfort.</span>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Shipping Info</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</footer>
