@@ -1,0 +1,110 @@
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.ActivePage = "Dashboard";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="admin-page-title">Dashboard Overview</h1>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn-admin-edit"><i class="bi bi-calendar3"></i> Last 30 Days</button>
+        <a href="#" class="btn-admin-primary">Download Report</a>
+    </div>
+</div>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <p class="stat-label">Total Products</p>
+                <div class="stat-icon"><i class="bi bi-box"></i></div>
+            </div>
+            <p class="stat-value">@ViewBag.TotalProducts</p>
+            <p class="stat-change">↑ +12.5% vs last month</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <p class="stat-label">Total Orders</p>
+                <div class="stat-icon"><i class="bi bi-bag"></i></div>
+            </div>
+            <p class="stat-value">@ViewBag.TotalOrders</p>
+            <p class="stat-change">↑ +8.2% vs last month</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <p class="stat-label">Revenue</p>
+                <div class="stat-icon"><i class="bi bi-currency-dollar"></i></div>
+            </div>
+            <p class="stat-value">$@ViewBag.Revenue.ToString("0,0")</p>
+            <p class="stat-change">↑ +24.1% vs last month</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <p class="stat-label">Total Users</p>
+                <div class="stat-icon"><i class="bi bi-people"></i></div>
+            </div>
+            <p class="stat-value">@ViewBag.TotalUsers</p>
+            <p class="stat-change">→ +1.0% vs last month</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders -->
+<div class="admin-table-card">
+    <div class="admin-table-header">
+        <h5>Recent Orders</h5>
+        <a href="@Url.Action("Orders", "Admin")" class="section-link" style="font-size:0.85rem;color:#888;text-decoration:none">View all →</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewBag.RecentOrders != null)
+            {
+                foreach (var order in ViewBag.RecentOrders)
+                {
+                    <tr>
+                        <td><strong>#ORD-@order.OrderId.ToString("D4")</strong></td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:32px;height:32px;background:#f0ede8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;color:#888">
+                                    @order.User?.FullName?.Substring(0, 1)
+                                </div>
+                                @order.User?.FullName
+                            </div>
+                        </td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>$@order.TotalAmount.ToString("0.00")</td>
+                        <td>
+                            <span class="badge-status @(order.Status == "Delivered" ? "badge-delivered" : order.Status == "Shipped" ? "badge-shipped" : "badge-processing")">
+                                @order.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center py-4" style="color:#aaa">No orders yet.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

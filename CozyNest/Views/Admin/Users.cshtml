@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CozyNest.Models.User>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.ActivePage = "Users";
+}
+
+<div class="mb-4">
+    <h1 class="admin-page-title">Users</h1>
+    <p class="admin-page-subtitle">Manage registered users.</p>
+</div>
+
+<div class="admin-table-card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:32px;height:32px;background:#f0ede8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:600;color:#888">
+                                    @user.FullName?.Substring(0, 1)
+                                </div>
+                                @user.FullName
+                            </div>
+                        </td>
+                        <td>@user.Email</td>
+                        <td>
+                            <span class="badge-status @(user.Role == "Admin" ? "badge-processing" : "badge-instock")">
+                                @user.Role
+                            </span>
+                        </td>
+                        <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center py-4" style="color:#aaa">No users found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</html>

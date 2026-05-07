@@ -1,0 +1,156 @@
+﻿@model CozyNest.Models.Cart
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/cart.css")" rel="stylesheet" />
+    <style>
+        .checkout-form-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid #f0ede8;
+        }
+
+            .checkout-form-card .form-label {
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #444;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+            }
+
+            .checkout-form-card .form-control {
+                background: #faf9f7;
+                border: 1px solid #ede9e3;
+                font-size: 0.88rem;
+                padding: 10px 14px;
+            }
+
+                .checkout-form-card .form-control:focus {
+                    background: #f5f2ee;
+                    box-shadow: none;
+                    border-color: #d4cec6;
+                }
+
+        .section-heading {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0ede8;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4 mt-4">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Cart")">Cart</a></li>
+            <li class="breadcrumb-item active">Checkout</li>
+        </ol>
+    </nav>
+
+    <h1 class="cart-title">Checkout</h1>
+
+    @using (Html.BeginForm("PlaceOrder", "Order", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+
+            <!-- Left: Shipping Form -->
+            <div class="col-md-7">
+                <div class="checkout-form-card mb-4">
+                    <p class="section-heading">Shipping Information</p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="FullName" class="form-control"
+                               value="@Session["UserName"]" placeholder="Jane Doe" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Shipping Address</label>
+                        <textarea name="ShippingAddress" class="form-control" rows="3"
+                                  placeholder="123 Street, City, Country"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" placeholder="Ho Chi Minh City" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" class="form-control" placeholder="70000" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" placeholder="+84 xxx xxx xxx" />
+                    </div>
+                </div>
+
+                <!-- Order Items Summary -->
+                <div class="checkout-form-card">
+                    <p class="section-heading">Order Items</p>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80" : item.Product.ImageUrl)"
+                                 style="width:56px;height:56px;border-radius:8px;object-fit:cover;background:#f0ede8" />
+                            <div class="flex-grow-1">
+                                <p style="font-size:0.9rem;font-weight:600;margin:0">@item.Product?.Name</p>
+                                <p style="font-size:0.8rem;color:#888;margin:0">Qty: @item.Quantity</p>
+                            </div>
+                            <span style="font-size:0.9rem;font-weight:600">
+                                $@((item.Product.Price * item.Quantity).ToString("0.00"))
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div class="col-md-4 offset-md-1">
+                <div class="order-summary">
+                    <h5>Order Summary</h5>
+
+                    @{
+                        var subtotal = Model.CartItems.Sum(i => i.Product.Price * i.Quantity);
+                        var itemCount = Model.CartItems.Sum(i => i.Quantity);
+                    }
+
+                    <div class="summary-row">
+                        <span>Subtotal (@itemCount items)</span>
+                        <span>$@subtotal.ToString("0.00")</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span style="font-weight:600">Free</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Taxes</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>$@subtotal.ToString("0.00")</span>
+                    </div>
+
+                    <button type="submit" class="btn-checkout mt-3">Place Order →</button>
+                    <p class="summary-note">By placing your order, you agree to our Terms of Service.</p>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>

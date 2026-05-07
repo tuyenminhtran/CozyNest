@@ -1,0 +1,62 @@
+﻿@model IEnumerable<CozyNest.Models.Order>
+@{
+    ViewBag.Title = "My Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/cart.css")" rel="stylesheet" />
+}
+
+<div class="container-fluid px-4 mt-4">
+    <h1 class="cart-title">My Orders</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var order in Model)
+        {
+            <div class="cart-item mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <strong>#ORD-@order.OrderId.ToString("D4")</strong>
+                        <span style="font-size:0.8rem;color:#aaa;margin-left:12px">
+                            @order.OrderDate.ToString("MMM dd, yyyy")
+                        </span>
+                    </div>
+                    <span class="stock-badge">@order.Status</span>
+                </div>
+
+                @if (order.OrderItems != null)
+                {
+                    foreach (var item in order.OrderItems)
+                    {
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80" : item.Product.ImageUrl)"
+                                 style="width:48px;height:48px;border-radius:8px;object-fit:cover" />
+                            <div class="flex-grow-1">
+                                <p style="font-size:0.88rem;font-weight:600;margin:0">@item.Product?.Name</p>
+                                <p style="font-size:0.78rem;color:#888;margin:0">Qty: @item.Quantity &times; $@item.UnitPrice.ToString("0.00")</p>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3"
+                     style="border-top:1px solid #f0ede8">
+                    <span style="font-size:0.85rem;color:#888">
+                        Ship to: @order.ShippingAddress
+                    </span>
+                    <strong>$@order.TotalAmount.ToString("0.00")</strong>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-cart">
+            <i class="bi bi-bag"></i>
+            <p>You haven't placed any orders yet.</p>
+            <a href="@Url.Action("Index", "Product")" class="btn-shop-now">Shop Now</a>
+        </div>
+    }
+</div>

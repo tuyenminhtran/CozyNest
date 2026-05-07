@@ -1,0 +1,105 @@
+﻿@model CozyNest.Models.Order
+@{
+    ViewBag.Title = "Order Confirmed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="@Url.Content("~/Content/cart.css")" rel="stylesheet" />
+    <style>
+        .success-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 48px;
+            border: 1px solid #f0ede8;
+            text-align: center;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #eaf4ea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: #5a8a5a;
+        }
+
+        .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.88rem;
+            color: #555;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0ede8;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4 mt-5">
+    <div class="success-card">
+
+        <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+
+        <h2 style="font-size:1.4rem;font-weight:700;color:#1a1a1a;margin-bottom:8px">
+            Order Confirmed!
+        </h2>
+        <p style="font-size:0.88rem;color:#888;margin-bottom:32px">
+            Thank you for your purchase. Your order has been placed successfully.
+        </p>
+
+        <!-- Order Details -->
+        <div class="text-start mb-4">
+            <div class="order-detail-row">
+                <span>Order ID</span>
+                <strong>#ORD-@Model.OrderId.ToString("D4")</strong>
+            </div>
+            <div class="order-detail-row">
+                <span>Order Date</span>
+                <span>@Model.OrderDate.ToString("MMM dd, yyyy")</span>
+            </div>
+            <div class="order-detail-row">
+                <span>Shipping Address</span>
+                <span>@Model.ShippingAddress</span>
+            </div>
+            <div class="order-detail-row">
+                <span>Status</span>
+                <span style="color:#5a8a5a;font-weight:600">@Model.Status</span>
+            </div>
+            <div class="order-detail-row" style="border:none">
+                <span>Total</span>
+                <strong style="font-size:1rem">$@Model.TotalAmount.ToString("0.00")</strong>
+            </div>
+        </div>
+
+        <!-- Items -->
+        @if (Model.OrderItems != null && Model.OrderItems.Any())
+        {
+            <div class="text-start mb-4">
+                <p style="font-size:0.8rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px">Items Ordered</p>
+                @foreach (var item in Model.OrderItems)
+                {
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <img src="@(string.IsNullOrEmpty(item.Product?.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80" : item.Product.ImageUrl)"
+                             style="width:44px;height:44px;border-radius:8px;object-fit:cover" />
+                        <div class="flex-grow-1 text-start">
+                            <p style="font-size:0.85rem;font-weight:600;margin:0">@item.Product?.Name</p>
+                            <p style="font-size:0.78rem;color:#888;margin:0">Qty: @item.Quantity &times; $@item.UnitPrice.ToString("0.00")</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="@Url.Action("Index", "Home")" class="btn-checkout" style="flex:1">Continue Shopping</a>
+            <a href="@Url.Action("MyOrders", "Order")" class="btn-save" style="flex:1;display:flex;align-items:center;justify-content:center">My Orders</a>
+        </div>
+
+    </div>
+</div>

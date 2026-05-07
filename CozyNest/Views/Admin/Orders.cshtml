@@ -1,0 +1,65 @@
+@model IEnumerable<CozyNest.Models.Order>
+@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.ActivePage = "Orders";
+}
+
+<div class="mb-4">
+    <h1 class="admin-page-title">Orders</h1>
+    <p class="admin-page-subtitle">Manage and update customer orders.</p>
+</div>
+
+<div class="admin-table-card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var order in Model)
+                {
+                    <tr>
+                        <td><strong>#ORD-@order.OrderId.ToString("D4")</strong></td>
+                        <td>@order.User?.FullName</td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>$@order.TotalAmount.ToString("0.00")</td>
+                        <td>
+                            <span class="badge-status @(order.Status == "Delivered" ? "badge-delivered" : order.Status == "Shipped" ? "badge-shipped" : "badge-processing")">
+                                @order.Status
+                            </span>
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("UpdateOrderStatus", "Admin", FormMethod.Post, new { style = "display:flex;gap:6px" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("orderId", order.OrderId)
+                                <select name="status" class="form-select form-select-sm" style="width:130px;font-size:0.8rem">
+                                    <option value="Pending" @(order.Status == "Pending" ? "selected" : "")>Pending</option>
+                                    <option value="Processing" @(order.Status == "Processing" ? "selected" : "")>Processing</option>
+                                    <option value="Shipped" @(order.Status == "Shipped" ? "selected" : "")>Shipped</option>
+                                    <option value="Delivered" @(order.Status == "Delivered" ? "selected" : "")>Delivered</option>
+                                </select>
+                                <button type="submit" class="btn-admin-edit">Update</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center py-4" style="color:#aaa">No orders yet.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -27,20 +27,34 @@
                     <a class="nav-link" href="#">About</a>
                 </li>
             </ul>
-
             <!-- Icons -->
             <div class="navbar-icons d-flex align-items-center">
                 <a href="#"><i class="bi bi-search"></i></a>
                 <a href="@Url.Action("Index", "Cart")"><i class="bi bi-bag"></i></a>
+
                 @if (Session["UserId"] != null)
                 {
-                    <a href="@Url.Action("Index", "Account")"><i class="bi bi-person"></i></a>
+                    <div class="dropdown ms-2">
+                        <button class="btn-login dropdown-toggle border-0 bg-transparent" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> @Session["UserName"]
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            @if (Session["UserRole"] != null && Session["UserRole"].ToString() == "Admin")
+                            {
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Admin")">Admin Dashboard</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                            }
+                            <li><a class="dropdown-item" href="href="@Url.Action("MyOrders", "Order")"">My Orders</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Logout", "Account")">Logout</a></li>
+                        </ul>
+                    </div>
                 }
                 else
                 {
                     <a href="@Url.Action("Login", "Account")" class="btn-login ms-2">Login</a>
                 }
             </div>
+
         </div>
 
     </div>

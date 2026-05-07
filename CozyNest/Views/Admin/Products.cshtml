@@ -1,0 +1,102 @@
+@model IEnumerable<CozyNest.Models.Product>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.ActivePage = "Products";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="admin-page-title">Product Management</h1>
+        <p class="admin-page-subtitle">View, edit, and manage your CozyNest catalog.</p>
+    </div>
+    <a href="@Url.Action("CreateProduct", "Admin")" class="btn-admin-primary">+ Add New Product</a>
+</div>
+
+<div class="admin-table-card">
+    <div class="admin-table-header">
+        <div class="admin-search">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchInput" placeholder="Search products..." value="@ViewBag.Search" />
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var product in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80" : product.ImageUrl)"
+                                     class="product-thumb" alt="@product.Name" />
+                                <div>
+                                    <strong>@product.Name</strong>
+                                    <div style="font-size:0.78rem;color:#aaa">SKU: PRD-@product.ProductId.ToString("D3")</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@product.Category?.Name</td>
+                        <td>$@product.Price.ToString("0.00")</td>
+                        <td>
+                            @if (product.Stock > 10)
+                            {
+                                <span class="badge-status badge-instock">In Stock (@product.Stock)</span>
+                            }
+                            else if (product.Stock > 0)
+                            {
+                                <span class="badge-status badge-lowstock">Low Stock (@product.Stock)</span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-pending">Out of Stock</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("EditProduct", "Admin", new { id = product.ProductId })" class="btn-admin-edit">Edit</a>
+                                @using (Html.BeginForm("DeleteProduct", "Admin", FormMethod.Post, new { style = "display:inline" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", product.ProductId)
+                                    <button type="submit" class="btn-admin-delete"
+                                            onclick="return confirm('Delete this product?')">
+                                        Delete
+                                    </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center py-4" style="color:#aaa">No products found.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const name = row.querySelector('strong')?.textContent.toLowerCase() || '';
+                row.style.display = name.includes(q) ? '' : 'none';
+            });
+        });
+    </script>
+}
