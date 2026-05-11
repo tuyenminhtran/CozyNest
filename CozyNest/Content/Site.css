@@ -1,20 +1,365 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+﻿/* ===== COZYNEST DESIGN SYSTEM — WARM EARTH ===== */
+
+/* Color Palette */
+:root {
+    --cn-bg: #F9F5F0; /* nền trang chính — kem ấm */
+    --cn-bg-card: #FFFFFF; /* card background */
+    --cn-bg-input: #F2EBE3; /* input fields */
+    --cn-bg-muted: #EDE3D9; /* hover, borders nhạt */
+
+    --cn-primary: #8B5E3C; /* nâu đậm — màu chủ đạo */
+    --cn-primary-hover: #7A5233; /* nâu đậm hơn khi hover */
+    --cn-accent: #C4805A; /* terra cotta — accent */
+    --cn-accent-light: #E8C4A8; /* terra cotta nhạt */
+
+    --cn-text: #2C1A0E; /* text chính — nâu rất đậm */
+    --cn-text-muted: #8A7060; /* text phụ */
+    --cn-text-light: #B8A090; /* text rất nhạt */
+
+    --cn-border: #DDD0C4; /* border */
+    --cn-shadow: rgba(139, 94, 60, 0.08);
+    --cn-success: #6B8F6B; /* xanh đất */
+    --cn-warning: #C4964A; /* vàng đất */
+    --cn-danger: #B85C4A; /* đỏ đất */
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+/* ===== GLOBAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+body {
+    background-color: var(--cn-bg);
+    color: var(--cn-text);
+    font-family: 'Georgia', serif;
+}
+
+a {
+    color: var(--cn-primary);
+}
+
+    a:hover {
+        color: var(--cn-primary-hover);
+    }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cn-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cn-accent-light);
+    border-radius: 3px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background: var(--cn-bg-card) !important;
+    border-bottom: 1px solid var(--cn-border);
+    padding: 16px 0;
+}
+
+.navbar-brand {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--cn-text) !important;
+    text-transform: uppercase;
+}
+
+    .navbar-brand h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--cn-primary);
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+.navbar-nav .nav-link {
+    font-size: 0.88rem;
+    color: var(--cn-text-muted) !important;
+    margin: 0 8px;
+    transition: color 0.2s;
+}
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        color: var(--cn-primary) !important;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
+
+.navbar-icons a {
+    color: var(--cn-text);
+    margin-left: 16px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    .navbar-icons a:hover {
+        color: var(--cn-primary);
+    }
+
+.btn-login {
+    font-size: 0.82rem;
+    color: var(--cn-text);
+    border: none;
+    background: none;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    .btn-login:hover {
+        color: var(--cn-primary);
+    }
+
+/* Dropdown */
+.dropdown-menu {
+    border: 1px solid var(--cn-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px var(--cn-shadow);
+    padding: 8px;
+}
+
+.dropdown-item {
+    font-size: 0.85rem;
+    color: var(--cn-text-muted);
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+
+    .dropdown-item:hover {
+        background: var(--cn-bg-muted);
+        color: var(--cn-primary);
+    }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+    font-size: 0.82rem;
+    background: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: var(--cn-text-muted);
+    text-decoration: none;
+}
+
+    .breadcrumb-item a:hover {
+        color: var(--cn-primary);
+    }
+
+.breadcrumb-item.active {
+    color: var(--cn-text);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--cn-text-light);
+}
+
+/* ===== BUTTONS GLOBAL ===== */
+.btn-primary-cn {
+    background: var(--cn-primary);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+}
+
+    .btn-primary-cn:hover {
+        background: var(--cn-primary-hover);
+        color: #fff;
+    }
+
+.btn-outline-cn {
+    background: transparent;
+    color: var(--cn-primary);
+    border: 1.5px solid var(--cn-primary);
+    padding: 11px 28px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+}
+
+    .btn-outline-cn:hover {
+        background: var(--cn-primary);
+        color: #fff;
+    }
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--cn-text);
+}
+
+.section-link {
+    font-size: 0.85rem;
+    color: var(--cn-text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+    .section-link:hover {
+        color: var(--cn-primary);
+    }
+
+/* ===== CARDS ===== */
+.cn-card {
+    background: var(--cn-bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--cn-border);
+}
+
+/* ===== FORMS ===== */
+.form-control, .form-select {
+    background: var(--cn-bg-input);
+    border: 1px solid var(--cn-border);
+    color: var(--cn-text);
+    border-radius: 8px;
+}
+
+    .form-control:focus, .form-select:focus {
+        background: var(--cn-bg-muted);
+        border-color: var(--cn-accent);
+        box-shadow: 0 0 0 3px rgba(196, 128, 90, 0.15);
+        color: var(--cn-text);
+    }
+
+    .form-control::placeholder {
+        color: var(--cn-text-light);
+    }
+
+.form-check-input:checked {
+    background-color: var(--cn-primary);
+    border-color: var(--cn-primary);
+}
+
+/* ===== BADGES ===== */
+.badge-warm {
+    background: var(--cn-accent-light);
+    color: var(--cn-primary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-success-cn {
+    background: #E8F0E8;
+    color: var(--cn-success);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.badge-warning-cn {
+    background: #F5ECD8;
+    color: var(--cn-warning);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+    background: var(--cn-text);
+    color: var(--cn-text-light);
+    padding: 60px 0 32px;
+    margin-top: 80px;
+}
+
+.footer-brand-name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.footer-tagline {
+    font-size: 0.82rem;
+    color: var(--cn-text-light);
+    line-height: 1.6;
+    max-width: 240px;
+}
+
+.footer-heading {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--cn-accent-light);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+}
+
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .footer-links-list li {
+        margin-bottom: 10px;
+    }
+
+    .footer-links-list a {
+        font-size: 0.85rem;
+        color: var(--cn-text-light);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .footer-links-list a:hover {
+            color: var(--cn-accent-light);
+        }
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    margin-top: 48px;
+    font-size: 0.78rem;
+    color: var(--cn-text-light);
+}
+
+/* ===== PAGINATION ===== */
+.pagination .page-link {
+    border: none;
+    color: var(--cn-text-muted);
+    font-size: 0.88rem;
+    padding: 8px 14px;
+    border-radius: 8px !important;
+    margin: 0 2px;
+    background: transparent;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--cn-primary);
+    color: #fff;
+}
+
+.pagination .page-link:hover {
+    background: var(--cn-bg-muted);
+    color: var(--cn-primary);
 }

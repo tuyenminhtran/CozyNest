@@ -22,21 +22,33 @@
     <!-- Curated Spaces -->
     <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
         <span class="section-title">Curated Spaces</span>
-        <a href="@Url.Action("Index", "Product")" class="section-link">View all categories →</a>
+        <a href="@Url.Action("Index", "Product")" class="section-link">View all categories &rarr;</a>
     </div>
     <div class="category-grid">
-        <div class="category-card large">
-            <img src="~/Content/images/furniture.jpg" alt="Furniture" />
-            <span class="category-label">Furniture</span>
-        </div>
-        <div class="category-card">
-            <img src="~/Content/images/lightning.jpg" alt="Lighting" />
-            <span class="category-label">Lighting</span>
-        </div>
-        <div class="category-card">
-            <img src="~/Content/images/plants.jpg" alt="Plants" />
-            <span class="category-label">Plants</span>
-        </div>
+        <a href="@Url.Action("Index", "Product", new { category = "Furniture" })" class="category-card large">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1600&q=100" alt="Furniture" />
+            <div class="category-card-overlay"></div>
+            <div class="category-label">
+                Furniture
+                <span>Tables, Chairs & More</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "Product", new { category = "Lighting" })" class="category-card">
+            <img src="https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=1600&q=100" alt="Lighting" />
+            <div class="category-card-overlay"></div>
+            <div class="category-label">
+                Lighting
+                <span>Lamps & Fixtures</span>
+            </div>
+        </a>
+        <a href="@Url.Action("Index", "Product", new { category = "Plants" })" class="category-card">
+            <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1600&q=100" alt="Plants" />
+            <div class="category-card-overlay"></div>
+            <div class="category-label">
+                Plants & Vases
+                <span>Bring Life Indoors</span>
+            </div>
+        </a>
     </div>
 
     <!-- Featured Products -->
@@ -81,14 +93,54 @@
 <!-- Footer -->
 <footer class="site-footer">
     <div class="container-fluid px-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <span class="footer-brand">© 2026 CozyNest. Curated for your comfort.</span>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Shipping Info</a>
-                <a href="#">Contact Us</a>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <p class="footer-brand-name">CozyNest</p>
+                <p class="footer-tagline">Intentional living for the modern home. Curated pieces that bring warmth and comfort to your sanctuary.</p>
+            </div>
+            <div class="col-md-2 offset-md-1 mb-4">
+                <p class="footer-heading">Company</p>
+                <ul class="footer-links-list">
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="@Url.Action("Index", "About")">About Us</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 mb-4">
+                <p class="footer-heading">Shop</p>
+                <ul class="footer-links-list">
+                    <li><a href="@Url.Action("Index", "Product")">All Products</a></li>
+                    <li><a href="@Url.Action("Index", "Product", new { category = "Furniture" })">Furniture</a></li>
+                    <li><a href="@Url.Action("Index", "Product", new { category = "Lighting" })">Lighting</a></li>
+                    <li><a href="@Url.Action("Index", "Product", new { category = "Textiles" })">Textiles</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 mb-4">
+                <p class="footer-heading">Support</p>
+                <ul class="footer-links-list">
+                    <li><a href="#">Shipping & Returns</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Track Order</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 mb-4">
+                <p class="footer-heading">Legal</p>
+                <ul class="footer-links-list">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom d-flex justify-content-between align-items-center">
+            <span>&copy; 2024 CozyNest Decor. Curated for your comfort.</span>
+            <div class="d-flex gap-3">
+                <a href="#" style="color:var(--cn-text-light);font-size:1.1rem"><i class="bi bi-instagram"></i></a>
+                <a href="#" style="color:var(--cn-text-light);font-size:1.1rem"><i class="bi bi-pinterest"></i></a>
+                <a href="#" style="color:var(--cn-text-light);font-size:1.1rem"><i class="bi bi-facebook"></i></a>
             </div>
         </div>
     </div>
-</footer>
+</footer>>

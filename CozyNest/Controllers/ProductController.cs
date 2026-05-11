@@ -1,6 +1,7 @@
 ﻿using CozyNest.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,11 +12,17 @@ namespace CozyNest.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index()
+        public ActionResult Index(string category = "")
         {
             ViewBag.Categories = db.Categories.ToList();
-            var products = db.Products.Include("Category").ToList();
-            return View(products);
+            ViewBag.SelectedCategory = category;
+
+            var products = db.Products.Include("Category").AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(category))
+                products = products.Where(p => p.Category.Name == category);
+
+            return View(products.ToList());
         }
 
         public ActionResult Details(int id)
